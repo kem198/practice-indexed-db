@@ -56,6 +56,7 @@ request.onupgradeneeded = (event) => {
   // → 各データの id プロパティをキーとして使用する
   db.createObjectStore(STORE_NAME, {
     keyPath: "id",
+    autoIncrement: true, // id をインクリメントする設定
   });
 };
 
@@ -102,16 +103,15 @@ document.querySelector("#create").addEventListener("click", () => {
   // add()
   // → 新しいデータを追加する
   //
-  // id がすでに存在する場合はエラーになる
+  // id は自動でインクリメントされる
   const request = store.add({
-    id: 1,
     name: name,
   });
 
   // onsuccess
   // → add() が成功したときに実行される
   request.onsuccess = () => {
-    result.textContent = `Created: id=1, name=${name}`;
+    result.textContent = `Created: id=${request.result}, name=${name}`;
   };
 
   // onerror
@@ -126,6 +126,9 @@ document.querySelector("#create").addEventListener("click", () => {
 // ==================================================
 // ボタンをクリックしたらデータを取得する
 document.querySelector("#read").addEventListener("click", () => {
+  // 入力欄から id を取得する
+  const id = document.querySelector("#read-id").value;
+
   // transaction()
   // → DBを操作するためのトランザクションを開始する
   //
@@ -137,20 +140,39 @@ document.querySelector("#read").addEventListener("click", () => {
   // → 操作する Object Store を取得する
   const store = transaction.objectStore(STORE_NAME);
 
-  // get()
-  // → 指定したキーのデータを取得する
-  //
-  // 今回は id が 1 のデータを取得する
-  const request = store.get(1);
+  // id が指定されている場合
+  if (id !== "") {
+    // get()
+    // → 指定したキーのデータを取得する
+    const request = store.get(Number(id));
+
+    // onsuccess
+    // → get() が成功したときに実行される
+    request.onsuccess = () => {
+      result.textContent = JSON.stringify(request.result, null, 2);
+    };
+
+    // onerror
+    // → get() が失敗したときに実行される
+    request.onerror = () => {
+      result.textContent = `Read error: ${request.error}`;
+    };
+
+    return;
+  }
+
+  // getAll()
+  // → Object Store の全データを取得する
+  const request = store.getAll();
 
   // onsuccess
-  // → get() が成功したときに実行される
+  // → getAll() が成功したときに実行される
   request.onsuccess = () => {
     result.textContent = JSON.stringify(request.result, null, 2);
   };
 
   // onerror
-  // → get() が失敗したときに実行される
+  // → getAll() が失敗したときに実行される
   request.onerror = () => {
     result.textContent = `Read error: ${request.error}`;
   };
@@ -161,6 +183,9 @@ document.querySelector("#read").addEventListener("click", () => {
 // ==================================================
 // ボタンをクリックしたらデータを更新する
 document.querySelector("#update").addEventListener("click", () => {
+  // 入力欄から id を取得する
+  const id = document.querySelector("#update-id").value;
+
   // 入力欄から name を取得する
   const name = document.querySelector("#update-name").value;
 
@@ -175,14 +200,14 @@ document.querySelector("#update").addEventListener("click", () => {
   //
   // 同じ id のデータが存在する場合は更新する
   const request = store.put({
-    id: 1,
+    id: Number(id),
     name: name,
   });
 
   // onsuccess
   // → put() が成功したときに実行される
   request.onsuccess = () => {
-    result.textContent = `Updated: id=1, name=${name}`;
+    result.textContent = `Updated: id=${id}, name=${name}`;
   };
 
   // onerror
@@ -197,26 +222,48 @@ document.querySelector("#update").addEventListener("click", () => {
 // ==================================================
 // ボタンをクリックしたらデータを削除する
 document.querySelector("#delete").addEventListener("click", () => {
+  // 入力欄から id を取得する
+  const id = document.querySelector("#delete-id").value;
+
   // データを削除するので readwrite を指定する
   const transaction = db.transaction(STORE_NAME, "readwrite");
 
   // 操作する Object Store を取得する
   const store = transaction.objectStore(STORE_NAME);
 
-  // delete()
-  // → 指定したキーのデータを削除する
-  //
-  // 今回は id が 1 のデータを削除する
-  const request = store.delete(1);
+  // id が指定されている場合
+  if (id !== "") {
+    // delete()
+    // → 指定したキーのデータを削除する
+    const request = store.delete(Number(id));
+
+    // onsuccess
+    // → delete() が成功したときに実行される
+    request.onsuccess = () => {
+      result.textContent = `Deleted: id=${id}`;
+    };
+
+    // onerror
+    // → delete() が失敗したときに実行される
+    request.onerror = () => {
+      result.textContent = `Delete error: ${request.error}`;
+    };
+
+    return;
+  }
+
+  // clear()
+  // → Object Store の全データを削除する
+  const request = store.clear();
 
   // onsuccess
-  // → delete() が成功したときに実行される
+  // → clear() が成功したときに実行される
   request.onsuccess = () => {
-    result.textContent = "Deleted: id=1";
+    result.textContent = "Deleted: all";
   };
 
   // onerror
-  // → delete() が失敗したときに実行される
+  // → clear() が失敗したときに実行される
   request.onerror = () => {
     result.textContent = `Delete error: ${request.error}`;
   };
