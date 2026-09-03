@@ -27,6 +27,9 @@ const STORE_NAME = "items";
 
 let db;
 
+// 処理結果を表示する要素
+const result = document.querySelector("#result");
+
 // ==================================================
 // DBを開く
 // ==================================================
@@ -65,7 +68,7 @@ request.onsuccess = (event) => {
   // open() で開いたデータベースを取得する
   db = event.target.result;
 
-  console.log("DB opened");
+  result.textContent = "DB opened";
 };
 
 // ==================================================
@@ -74,7 +77,7 @@ request.onsuccess = (event) => {
 // onerror
 // → 非同期処理が失敗したときに実行される
 request.onerror = () => {
-  console.error("DB open error:", request.error);
+  result.textContent = `DB open error: ${request.error}`;
 };
 
 // ==================================================
@@ -105,13 +108,13 @@ document.querySelector("#create").addEventListener("click", () => {
   // onsuccess
   // → add() が成功したときに実行される
   request.onsuccess = () => {
-    console.log("Created");
+    result.textContent = "Created: id=1, name=Alice";
   };
 
   // onerror
   // → add() が失敗したときに実行される
   request.onerror = () => {
-    console.error("Create error:", request.error);
+    result.textContent = `Create error: ${request.error}`;
   };
 });
 
@@ -140,13 +143,13 @@ document.querySelector("#read").addEventListener("click", () => {
   // onsuccess
   // → get() が成功したときに実行される
   request.onsuccess = () => {
-    console.log("Read:", request.result);
+    result.textContent = JSON.stringify(request.result, null, 2);
   };
 
   // onerror
   // → get() が失敗したときに実行される
   request.onerror = () => {
-    console.error("Read error:", request.error);
+    result.textContent = `Read error: ${request.error}`;
   };
 });
 
@@ -173,13 +176,13 @@ document.querySelector("#update").addEventListener("click", () => {
   // onsuccess
   // → put() が成功したときに実行される
   request.onsuccess = () => {
-    console.log("Updated");
+    result.textContent = "Updated: id=1, name=Bob";
   };
 
   // onerror
   // → put() が失敗したときに実行される
   request.onerror = () => {
-    console.error("Update error:", request.error);
+    result.textContent = `Update error: ${request.error}`;
   };
 });
 
@@ -203,12 +206,12 @@ document.querySelector("#delete").addEventListener("click", () => {
   // onsuccess
   // → delete() が成功したときに実行される
   request.onsuccess = () => {
-    console.log("Deleted");
+    result.textContent = "Deleted: id=1";
   };
 
   // onerror
   // → delete() が失敗したときに実行される
   request.onerror = () => {
-    console.error("Delete error:", request.error);
+    result.textContent = `Delete error: ${request.error}`;
   };
 });
