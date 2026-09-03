@@ -85,6 +85,9 @@ request.onerror = () => {
 // ==================================================
 // ボタンをクリックしたらデータを追加する
 document.querySelector("#create").addEventListener("click", () => {
+  // 入力欄から name を取得する
+  const name = document.querySelector("#create-name").value;
+
   // transaction()
   // → DBを操作するための「トランザクション」を開始する
   //
@@ -102,13 +105,13 @@ document.querySelector("#create").addEventListener("click", () => {
   // id がすでに存在する場合はエラーになる
   const request = store.add({
     id: 1,
-    name: "Alice",
+    name: name,
   });
 
   // onsuccess
   // → add() が成功したときに実行される
   request.onsuccess = () => {
-    result.textContent = "Created: id=1, name=Alice";
+    result.textContent = `Created: id=1, name=${name}`;
   };
 
   // onerror
@@ -158,6 +161,9 @@ document.querySelector("#read").addEventListener("click", () => {
 // ==================================================
 // ボタンをクリックしたらデータを更新する
 document.querySelector("#update").addEventListener("click", () => {
+  // 入力欄から name を取得する
+  const name = document.querySelector("#update-name").value;
+
   // データを変更するので readwrite を指定する
   const transaction = db.transaction(STORE_NAME, "readwrite");
 
@@ -170,13 +176,13 @@ document.querySelector("#update").addEventListener("click", () => {
   // 同じ id のデータが存在する場合は更新する
   const request = store.put({
     id: 1,
-    name: "Bob",
+    name: name,
   });
 
   // onsuccess
   // → put() が成功したときに実行される
   request.onsuccess = () => {
-    result.textContent = "Updated: id=1, name=Bob";
+    result.textContent = `Updated: id=1, name=${name}`;
   };
 
   // onerror
