@@ -49,15 +49,18 @@ request.onupgradeneeded = (event) => {
   // open() の結果として取得したデータベース
   db = event.target.result;
 
-  // createObjectStore()
-  // → データを保存する「入れ物」を作成する
-  //
-  // keyPath: "id"
-  // → 各データの id プロパティをキーとして使用する
-  db.createObjectStore(STORE_NAME, {
-    keyPath: "id",
-    autoIncrement: true, // id をインクリメントする設定
-  });
+  // Object Store がまだ存在しない場合
+  if (!db.objectStoreNames.contains(STORE_NAME)) {
+    // createObjectStore()
+    // → データを保存する「入れ物」を作成する
+    //
+    // keyPath: "id"
+    // → 各データの id プロパティをキーとして使用する
+    db.createObjectStore(STORE_NAME, {
+      keyPath: "id",
+      autoIncrement: true, // id をインクリメントする設定
+    });
+  }
 };
 
 // ==================================================
