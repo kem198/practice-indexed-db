@@ -1,6 +1,6 @@
 # Practice - IndexedDB API
 
-IndexedDB の練習用リポジトリ。
+同 API の練習用リポジトリ。
 
 ## 公開中の URL
 
