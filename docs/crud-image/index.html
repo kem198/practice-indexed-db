@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Practice - IndexedDB for image</title>
+
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      #images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .image-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .image-item img {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Practice - IndexedDB for image</h1>
+
+    <div class="container">
+      <div>
+        <input id="create-image" type="file" accept="image/*" />
+        <button id="create">Upload</button>
+      </div>
+
+      <div>
+        <input id="read-id" type="number" placeholder="ID (空欄で全件)" />
+        <button id="read">Read</button>
+      </div>
+
+      <div>
+        <input id="update-id" type="number" placeholder="ID" />
+        <input id="update-image" type="file" accept="image/*" />
+        <button id="update">Update</button>
+      </div>
+
+      <div>
+        <input id="delete-id" type="number" placeholder="ID (空欄で全件)" />
+        <button id="delete">Delete</button>
+      </div>
+
+      <pre id="result"></pre>
+
+      <div id="images"></div>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
