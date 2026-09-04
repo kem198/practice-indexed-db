@@ -1,4 +1,4 @@
-# Practice - IndexedDB
+# Practice - IndexedDB API
 
 IndexedDB の練習用リポジトリ。
 
